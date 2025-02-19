@@ -45,7 +45,7 @@
 ## DB
 - Firebase
 
-## SVN
+## VCS
 - git
 - github
 

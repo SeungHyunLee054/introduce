@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>detail</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="./js/firebase_init.js"></script>
+    <script type="module">
+        import { readDocs } from "../js/firebase_func.js";
+        
+        $('#detail').empty();
+        const querySnapshot = await readDocs("persons");
+
+        const urlName = new URLSearchParams(window.location.search).get('name');
+
+        querySnapshot.forEach((doc) => {
+            if (doc.data().name == urlName) {
+                let name = doc.data().name;
+                let mbti = doc.data().mbti;
+                let personality = doc.data().personality;
+                let goal = doc.data().goal;
+                let reason = doc.data().reason;
+                let address = doc.data().address;
+                let photo = doc.data().photo;
+                let oneWord = doc.data().oneWord;
+
+                const tempHtml = `<div class="flex justify-start items-center w-[auto] h-[auto] opacity-80 gap-12 p-16 bg-white border border-[#d9d9d9]">
+        <div
+            class="flex flex-col justify-center items-center flex-grow-0 flex-shrink-0 w-[auto] h-[auto] overflow-hidden bg-[#e3e3e3]">
+            <img src="${photo}" class="w-[100%] h-[100%] object-cover"/>
+        </div>
+        <div class="flex flex-col justify-start items-start flex-grow-0 flex-shrink-0 h-[351px] w-[484px] gap-6">
+            <div>
+                <p
+                    class="self-stretch flex-grow-0 flex-shrink-0 w-[484px] text-2xl font-semibold text-left text-[#1e1e1e]">
+                    ${name} 
+                </p>
+                <p class="self-stretch flex-grow-0 flex-shrink-0 w-[484px] text-xl text-left text-[#757575]">
+                    ${oneWord}
+                </p>
+            </div>
+            <div>
+                <p>
+                    MBTI : ${mbti}
+                </p>
+            </div>
+            <div>
+                <p>
+                    나의 성격 : ${personality}
+                </p>
+            </div>
+            <div>
+                <p>
+                    나의 목표 : ${goal}
+                </p>
+            </div>
+            <div>
+                <p>
+                    강의에 참여한 이유 및 강의에서 얻어가고 싶은 것 : ${reason}
+                </p>
+            </div>
+            <div>
+                <p>
+                    github 또는 블로그 주소 : <a href="${address}">${address}</a>
+                </p>
+            </div>
+        </div>
+    </div>`;
+
+                $("#detail").append(tempHtml);
+                return false;
+            }
+        });
+
+        $('#header').load("header.html");
+    </script>
+</head>
+
+<body>
+    <div id="header"></div>
+
+    <div id="detail">
+    </div>
+</body>
+
+</html>
